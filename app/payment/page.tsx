@@ -65,7 +65,7 @@ export default function Payment() {
 
   return (
     <main style={{ minHeight: "100vh", background: "linear-gradient(135deg, #c2410c 0%, #ea580c 50%, #d97706 100%)", backgroundImage: "url('https://images.unsplash.com/photo-1719399184315-5ffab4006e18?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fCVFQyVCQiVBOCVFQyU4NSU4OSUyMCVFQyU5NSU4NCVFRCU4QSVCOHxlbnwwfHwwfHx8MA%3D%3D')", backgroundSize: "cover", backgroundPosition: "center", backgroundAttachment: "fixed", color: "white", fontFamily: "'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif", position: "relative", overflow: "hidden" }}>
-      <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(194, 65, 12, 0.65)", zIndex: 1, pointerEvents: "none" }} />
+      <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(194, 65, 12, 0.2)", zIndex: 1, pointerEvents: "none" }} />
       <div style={{ position: "relative", zIndex: 10, padding: "40px 16px" }}>
         
         {/* 상단 설명 */}
@@ -93,28 +93,28 @@ export default function Payment() {
         </div>
 
         {/* 선택된 운세 */}
-        <div style={{ maxWidth: 1000, margin: "0 auto", marginBottom: 40, background: "#f59e0b", padding: 24, borderRadius: 12 }}>
-          <h3 style={{ color: "#1a1a1a", fontSize: 18, fontWeight: 900, marginBottom: 20 }}>✨ 선택된 운세</h3>
+        <div style={{ maxWidth: 1000, margin: "0 auto", marginBottom: 40, background: "#ea580c", padding: 24, borderRadius: 12 }}>
+          <h3 style={{ color: "#ffffff", fontSize: 18, fontWeight: 900, marginBottom: 20 }}>✨ 선택된 운세</h3>
           
           <div style={{ marginBottom: 20 }}>
-            <h4 style={{ color: "#1a1a1a", fontSize: 13, fontWeight: 700, marginBottom: 12 }}>첫 번째 (4개)</h4>
+            <h4 style={{ color: "#ffffff", fontSize: 13, fontWeight: 700, marginBottom: 12 }}>첫 번째 (4개)</h4>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
               {fortuneItems.slice(0, 4).map(item => (
-                <div key={item.id} style={{ background: selectedFeatures.includes(item.id) ? "rgba(251,191,36,0.5)" : "rgba(139,92,246,0.2)", border: selectedFeatures.includes(item.id) ? "2px solid #1a1a1a" : "1px solid rgba(139,92,246,0.5)", borderRadius: 10, padding: 12, textAlign: "center" }}>
+                <div key={item.id} style={{ background: selectedFeatures.includes(item.id) ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.1)", border: selectedFeatures.includes(item.id) ? "2px solid #ffffff" : "1px solid rgba(255,255,255,0.3)", borderRadius: 10, padding: 12, textAlign: "center" }}>
                   <div style={{ fontSize: 24, marginBottom: 6 }}>{item.icon}</div>
-                  <p style={{ color: "#1a1a1a", fontSize: 11, fontWeight: 700, margin: 0 }}>{item.name}</p>
+                  <p style={{ color: "#ffffff", fontSize: 11, fontWeight: 700, margin: 0 }}>{item.name}</p>
                 </div>
               ))}
             </div>
           </div>
 
           <div>
-            <h4 style={{ color: "#1a1a1a", fontSize: 13, fontWeight: 700, marginBottom: 12 }}>두 번째 (4개)</h4>
+            <h4 style={{ color: "#ffffff", fontSize: 13, fontWeight: 700, marginBottom: 12 }}>두 번째 (4개)</h4>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
               {fortuneItems.slice(4, 8).map(item => (
-                <div key={item.id} style={{ background: selectedFeatures.includes(item.id) ? "rgba(251,191,36,0.5)" : "rgba(139,92,246,0.2)", border: selectedFeatures.includes(item.id) ? "2px solid #1a1a1a" : "1px solid rgba(139,92,246,0.5)", borderRadius: 10, padding: 12, textAlign: "center" }}>
+                <div key={item.id} style={{ background: selectedFeatures.includes(item.id) ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.1)", border: selectedFeatures.includes(item.id) ? "2px solid #ffffff" : "1px solid rgba(255,255,255,0.3)", borderRadius: 10, padding: 12, textAlign: "center" }}>
                   <div style={{ fontSize: 24, marginBottom: 6 }}>{item.icon}</div>
-                  <p style={{ color: "#1a1a1a", fontSize: 11, fontWeight: 700, margin: 0 }}>{item.name}</p>
+                  <p style={{ color: "#ffffff", fontSize: 11, fontWeight: 700, margin: 0 }}>{item.name}</p>
                 </div>
               ))}
             </div>
