@@ -8,6 +8,7 @@ export default function FreeAnalysis() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
   const [analyzing, setAnalyzing] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -32,8 +33,47 @@ export default function FreeAnalysis() {
       return;
     }
     setAnalyzing(true);
-    setStep(2);
-    setTimeout(() => setAnalyzing(false), 2000);
+    
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1000,
+          messages: [
+            {
+              role: "user",
+              content: `다음 사람의 사주를 3페이지 분량으로 간단히 분석해주세요:
+              
+이름: ${formData.name}
+생년월일: 미입력 (무료 분석이므로 기본 정보만 사용)
+이메일: ${formData.email}
+
+분석 내용:
+1. 기본 성격 분석
+2. 올해 운세
+3. 추천 운세 분석
+
+간단하고 긍정적인 톤으로 작성해주세요.`
+            }
+          ]
+        })
+      });
+
+      const data = await response.json();
+      const analysisText = data.content[0].type === "text" ? data.content[0].text : "분석 결과를 불러올 수 없습니다.";
+      
+      setAnalysisResult(analysisText);
+      setStep(2);
+    } catch (error) {
+      alert("분석 중 오류가 발생했습니다. 다시 시도해주세요.");
+      console.error(error);
+    } finally {
+      setAnalyzing(false);
+    }
   };
 
   const handlePayment = () => {
@@ -61,7 +101,7 @@ export default function FreeAnalysis() {
                 <label style={{ display: "block", marginBottom: 8, fontWeight: 700, color: "#fbbf24", fontSize: 14 }}>전화번호</label>
                 <input type="text" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="01012345678" maxLength={13} style={{ width: "100%", padding: "12px", borderRadius: 8, border: "none", fontSize: 14, boxSizing: "border-box", backgroundColor: "#f5f5f5", color: "#000" }} />
               </div>
-              <button onClick={handleAnalyze} style={{ width: "100%", padding: 12, background: "linear-gradient(135deg, #fbbf24, #f59e0b)", color: "black", border: "none", borderRadius: 8, fontWeight: 900, fontSize: 14, cursor: "pointer" }}>분석 시작</button>
+              <button onClick={handleAnalyze} disabled={analyzing} style={{ width: "100%", padding: 12, background: "linear-gradient(135deg, #fbbf24, #f59e0b)", color: "black", border: "none", borderRadius: 8, fontWeight: 900, fontSize: 14, cursor: analyzing ? "not-allowed" : "pointer", opacity: analyzing ? 0.6 : 1 }}>분석 시작</button>
             </div>
           )}
 
@@ -73,8 +113,10 @@ export default function FreeAnalysis() {
                   <div style={{ fontSize: 40 }}>🔄</div>
                 </div>
               ) : (
-                <div style={{ background: "rgba(108,64,200,0.9)", padding: 24, borderRadius: 12, border: "1px solid rgba(139,92,246,1)" }}>
-                  <p style={{ marginBottom: 20, lineHeight: 1.8, color: "#f5f5f5", fontSize: 14 }}>분석이 완료되었습니다!<br/><br/>더 자세한 분석 결과를 원하시나요?</p>
+                <div style={{ background: "rgba(108,64,200,0.9)", padding: 24, borderRadius: 12, border: "1px solid rgba(139,92,246,1)", maxHeight: "600px", overflowY: "auto" }}>
+                  <h2 style={{ color: "#fbbf24", fontSize: 18, fontWeight: 900, marginBottom: 20 }}>📖 분석 결과</h2>
+                  <p style={{ color: "#f5f5f5", fontSize: 12, fontWeight: 700, lineHeight: 1.8, marginBottom: 30, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{analysisResult}</p>
+                  <p style={{ marginBottom: 20, lineHeight: 1.8, color: "#f5f5f5", fontSize: 14 }}>더 자세한 분석 결과를 원하시나요?</p>
                   <button onClick={handlePayment} style={{ width: "100%", padding: 12, background: "linear-gradient(135deg, #fbbf24, #f59e0b)", color: "black", border: "none", borderRadius: 8, fontWeight: 900, fontSize: 14, cursor: "pointer" }}>🎁 유료 패키지 보기</button>
                 </div>
               )}
