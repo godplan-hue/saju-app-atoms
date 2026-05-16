@@ -46,21 +46,25 @@ export async function POST(request: NextRequest) {
     if (!response.ok) {
       console.error("Anthropic API 오류:", data);
       return NextResponse.json(
-        { error: "분석 중 오류가 발생했습니다" },
+        { error: data.error?.message || "분석 중 오류가 발생했습니다" },
         { status: response.status }
       );
     }
 
-    const analysisText =
-      data.content[0].type === "text"
-        ? data.content[0].text
-        : "분석 결과를 불러올 수 없습니다.";
+    let analysisText = "분석 결과를 불러올 수 없습니다.";
+    
+    if (data.content && Array.isArray(data.content) && data.content.length > 0) {
+      const firstContent = data.content[0];
+      if (firstContent.type === "text") {
+        analysisText = firstContent.text;
+      }
+    }
 
     return NextResponse.json({ result: analysisText });
   } catch (error) {
     console.error("API 오류:", error);
     return NextResponse.json(
-      { error: "서버 오류가 발생했습니다" },
+      { error: "서버 오류가 발생했습니다: " + String(error) },
       { status: 500 }
     );
   }
