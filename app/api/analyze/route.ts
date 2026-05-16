@@ -21,35 +21,53 @@ export async function POST(request: NextRequest) {
       },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
-        max_tokens: 1000,
+        max_tokens: 1500,
         messages: [
           {
             role: "user",
-            content: `다음 사람의 사주를 3페이지 분량으로 간단히 분석해주세요:
+            content: `이름: ${name}
 
-이름: ${name}
-이메일: ${email}
+당신은 전문 사주 분석가입니다. 위 이름만으로도 상세한 사주 분석을 작성해야 합니다.
 
-분석 내용:
-1. 기본 성격 분석 (긍정적 관점)
-2. 올해 운세
-3. 추천 운세 분석
+반드시 다음 내용을 포함해서 3페이지 분량으로 작성하세요:
 
-간단하고 긍정적인 톤으로 작성해주세요.`,
+**1. 성격 및 기질 분석 (한글 이름의 한자 의미 기반)**
+- 이름 글자의 의미
+- 성격의 강점
+- 성격의 약점
+
+**2. 2026년 운세**
+- 전체 운세
+- 월별 운세
+
+**3. 오행 기반 분석**
+- 재물운
+- 결혼운
+- 직업운
+- 건강운
+
+긍정적이고 희망적인 톤으로 작성하세요. 부정적인 내용은 피하세요.`,
           },
         ],
       }),
     });
 
-    const data = await response.json();
-
     if (!response.ok) {
-      console.error("Anthropic API 오류:", data);
+      let errorMessage = "Claude API 오류";
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.error?.message || JSON.stringify(errorData);
+      } catch (parseError) {
+        const textError = await response.text();
+        errorMessage = textError || response.statusText;
+      }
       return NextResponse.json(
-        { error: data.error?.message || "분석 중 오류가 발생했습니다" },
+        { error: errorMessage },
         { status: response.status }
       );
     }
+
+    const data = await response.json();
 
     let analysisText = "분석 결과를 불러올 수 없습니다.";
     
@@ -64,7 +82,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("API 오류:", error);
     return NextResponse.json(
-      { error: "서버 오류가 발생했습니다: " + String(error) },
+      { error: "서버 오류가 발생했습니다" },
       { status: 500 }
     );
   }

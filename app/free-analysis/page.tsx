@@ -1,3 +1,6 @@
+// ===== page.tsx =====
+// 경로: app/free-analysis/page.tsx
+
 "use client";
 
 import { useState } from "react";
@@ -32,6 +35,7 @@ export default function FreeAnalysis() {
       alert("모든 정보를 입력해주세요");
       return;
     }
+
     setAnalyzing(true);
     
     try {
@@ -46,16 +50,24 @@ export default function FreeAnalysis() {
         }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        alert(data.error || "분석 중 오류가 발생했습니다.");
+        let errorMessage = "분석 중 오류가 발생했습니다.";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch (e) {
+          const textError = await response.text();
+          errorMessage = textError || response.statusText;
+        }
+        alert(errorMessage);
         setAnalyzing(false);
         return;
       }
 
+      const data = await response.json();
       setAnalysisResult(data.result);
       setStep(2);
+      setAnalyzing(false);
     } catch (error) {
       alert("분석 중 오류가 발생했습니다. 다시 시도해주세요.");
       console.error(error);
@@ -88,7 +100,9 @@ export default function FreeAnalysis() {
                 <label style={{ display: "block", marginBottom: 8, fontWeight: 700, color: "#fbbf24", fontSize: 14 }}>전화번호</label>
                 <input type="text" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="01012345678" maxLength={13} style={{ width: "100%", padding: "12px", borderRadius: 8, border: "none", fontSize: 14, boxSizing: "border-box", backgroundColor: "#f5f5f5", color: "#000" }} />
               </div>
-              <button onClick={handleAnalyze} disabled={analyzing} style={{ width: "100%", padding: 12, background: "linear-gradient(135deg, #fbbf24, #f59e0b)", color: "black", border: "none", borderRadius: 8, fontWeight: 900, fontSize: 14, cursor: analyzing ? "not-allowed" : "pointer", opacity: analyzing ? 0.6 : 1 }}>분석 시작</button>
+              <button onClick={handleAnalyze} disabled={analyzing} style={{ width: "100%", padding: 12, background: "linear-gradient(135deg, #fbbf24, #f59e0b)", color: "black", border: "none", borderRadius: 8, fontWeight: 900, fontSize: 14, cursor: analyzing ? "not-allowed" : "pointer", opacity: analyzing ? 0.6 : 1 }}>
+                {analyzing ? "분석 중..." : "분석 시작"}
+              </button>
             </div>
           )}
 
