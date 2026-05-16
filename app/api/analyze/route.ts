@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email } = await request.json();
+    const { name, email, birth, birthHour, gender } = await request.json();
 
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) {
@@ -21,32 +21,44 @@ export async function POST(request: NextRequest) {
       },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
-        max_tokens: 1500,
+        max_tokens: 2500,
         messages: [
           {
             role: "user",
             content: `이름: ${name}
+생년월일: ${birth}
+생시: ${birthHour}
+성별: ${gender}
 
-당신은 전문 사주 분석가입니다. 위 이름만으로도 상세한 사주 분석을 작성해야 합니다.
+당신은 전문 사주 분석가입니다. 다음 6가지를 상세하게 작성하세요:
 
-반드시 다음 내용을 포함해서 3페이지 분량으로 작성하세요:
+1. **이름 간단풀이**: ${name}의 이름 의미, 성격, 특징을 상세히 분석
+2. **총운**: 전체 운의 흐름, 인생 패턴을 구체적으로 분석
+3. **재물운**: 재물 흐름, 경제 운, 재정 관리 방법을 상세히 분석
+4. **연애운**: 연애 패턴, 결혼 운, 가정 운을 구체적으로 분석
+5. **건강운**: 건강 상태, 주의해야 할 질환, 건강 관리 방법을 상세히 분석
+6. **직업운**: 적성, 추천 직업, 커리어 방향을 구체적으로 분석
 
-**1. 성격 및 기질 분석 (한글 이름의 한자 의미 기반)**
-- 이름 글자의 의미
-- 성격의 강점
-- 성격의 약점
+각 섹션마다 상세하고 구체적인 내용을 담되, 긍정적인 톤으로 작성하세요.
 
-**2. 2026년 운세**
-- 전체 운세
-- 월별 운세
+다음 형식으로 반드시 작성하세요:
+[이름 간단풀이]
+내용
 
-**3. 오행 기반 분석**
-- 재물운
-- 결혼운
-- 직업운
-- 건강운
+[총운]
+내용
 
-긍정적이고 희망적인 톤으로 작성하세요. 부정적인 내용은 피하세요.`,
+[재물운]
+내용
+
+[연애운]
+내용
+
+[건강운]
+내용
+
+[직업운]
+내용`,
           },
         ],
       }),
@@ -69,7 +81,7 @@ export async function POST(request: NextRequest) {
 
     const data = await response.json();
 
-    let analysisText = "분석 결과를 불러올 수 없습니다.";
+    let analysisText = "";
     
     if (data.content && Array.isArray(data.content) && data.content.length > 0) {
       const firstContent = data.content[0];
@@ -78,7 +90,26 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({ result: analysisText });
+    // 텍스트 파싱
+    const parseSection = (text: string, section: string): string => {
+      const regex = new RegExp(`\\[${section}\\]([^\\[]*?)(?=\\[|$)`, 's');
+      const match = text.match(regex);
+      if (match && match[1]) {
+        return match[1].trim();
+      }
+      return "분석 완료";
+    };
+
+    const result = {
+      name: parseSection(analysisText, "이름 간단풀이"),
+      totalLuck: parseSection(analysisText, "총운"),
+      wealthLuck: parseSection(analysisText, "재물운"),
+      loveLuck: parseSection(analysisText, "연애운"),
+      healthLuck: parseSection(analysisText, "건강운"),
+      jobLuck: parseSection(analysisText, "직업운"),
+    };
+
+    return NextResponse.json({ result });
   } catch (error) {
     console.error("API 오류:", error);
     return NextResponse.json(
