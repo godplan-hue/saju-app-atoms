@@ -35,43 +35,30 @@ export default function FreeAnalysis() {
     setAnalyzing(true);
     
     try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const response = await fetch("/api/analyze", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
-          messages: [
-            {
-              role: "user",
-              content: `다음 사람의 사주를 3페이지 분량으로 간단히 분석해주세요:
-              
-이름: ${formData.name}
-생년월일: 미입력 (무료 분석이므로 기본 정보만 사용)
-이메일: ${formData.email}
-
-분석 내용:
-1. 기본 성격 분석
-2. 올해 운세
-3. 추천 운세 분석
-
-간단하고 긍정적인 톤으로 작성해주세요.`
-            }
-          ]
-        })
+          name: formData.name,
+          email: formData.email,
+        }),
       });
 
       const data = await response.json();
-      const analysisText = data.content[0].type === "text" ? data.content[0].text : "분석 결과를 불러올 수 없습니다.";
-      
-      setAnalysisResult(analysisText);
+
+      if (!response.ok) {
+        alert(data.error || "분석 중 오류가 발생했습니다.");
+        setAnalyzing(false);
+        return;
+      }
+
+      setAnalysisResult(data.result);
       setStep(2);
     } catch (error) {
       alert("분석 중 오류가 발생했습니다. 다시 시도해주세요.");
       console.error(error);
-    } finally {
       setAnalyzing(false);
     }
   };
