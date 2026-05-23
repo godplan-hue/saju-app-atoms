@@ -216,7 +216,7 @@ export default function FreeAnalysis() {
       <>
         <Head>
           <meta name="google" content="notranslate" />
-          <meta httpEquiv="Content-Language" content="ko" />
+          <meta httpEquiv="Content-Language" content="ko-KR" />
         </Head>
         <main style={{ minHeight: "100vh", background: "linear-gradient(135deg, #c2410c 0%, #ea580c 50%, #d97706 100%)", color: "white", padding: "40px 20px", fontFamily: "'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif", textAlign: "center" }}>
           <div style={{ maxWidth: 600, margin: "0 auto" }}>
@@ -237,7 +237,7 @@ export default function FreeAnalysis() {
       <>
         <Head>
           <meta name="google" content="notranslate" />
-          <meta httpEquiv="Content-Language" content="ko" />
+          <meta httpEquiv="Content-Language" content="ko-KR" />
         </Head>
         <main style={{ minHeight: "100vh", background: "linear-gradient(135deg, #ffd700 0%, #ffed4e 100%)", color: "#333", fontFamily: "'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif", position: "relative", overflow: "hidden" }}>
           <div style={{ position: "relative", zIndex: 10, padding: isMobile ? "20px 16px" : "40px 16px", minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center" }}>
@@ -260,7 +260,7 @@ export default function FreeAnalysis() {
                   <div id="result-content">
                     <div style={{ marginBottom: isMobile ? 25 : 35 }}>
                       <h2 style={{ color: "#d4af37", fontSize: isMobile ? 17 : 21, fontWeight: 900, marginBottom: isMobile ? 10 : 14, borderBottom: "3px solid #d4af37", paddingBottom: isMobile ? 8 : 10, marginTop: 0 }}>📝 이름 분석</h2>
-                      <p style={{ color: "#333", fontSize: isMobile ? 13 : 15, fontWeight: 500, lineHeight: 1.2, marginTop: 0, marginBottom: 0, whiteSpace: "pre-wrap", wordBreak: "break-word", overflowWrap: "break-word", wordWrap: "break-word" }}>{result.name}</p>
+                      <p style={{ color: "#333", fontSize: isMobile ? 13 : 15, fontWeight: 500, lineHeight: isMobile ? 1.0 : 1.2, marginTop: 0, marginBottom: 0, whiteSpace: "pre-wrap", wordBreak: "break-word", overflowWrap: "break-word", wordWrap: "break-word", maxWidth: "100%" }}>{result.name}</p>
                     </div>
 
                     <div style={{ marginBottom: isMobile ? 25 : 35 }}>
@@ -318,7 +318,7 @@ export default function FreeAnalysis() {
     <>
       <Head>
         <meta name="google" content="notranslate" />
-        <meta httpEquiv="Content-Language" content="ko" />
+        <meta httpEquiv="Content-Language" content="ko-KR" />
       </Head>
       <main style={{ minHeight: "100vh", background: "linear-gradient(135deg, #0f0620 0%, #1a0f35 50%, #0a0420 100%)", backgroundImage: backgroundImages[step], backgroundSize: "cover", backgroundPosition: "center", backgroundAttachment: "fixed", color: "white", fontFamily: "'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0, 0, 0, 0.55)", zIndex: 1, pointerEvents: "none" }} />
