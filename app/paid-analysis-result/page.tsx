@@ -29,17 +29,17 @@ export default function PaidAnalysisResult() {
     const hasTime = paidInfo?.birthTime && paidInfo.birthTime !== "00:00";
 
     return {
-      // 생시 필요 5개 (맨 앞에 표시)
+      // 생시 필요 5개 (맨 앞에 표시 - API 필요)
+      nameAnalysis: `"${name}"은(는) 밝고 긍정적인 에너지를 가진 이름입니다.\n주변 사람들에게 좋은 영향을 미치며,\n친화력이 우수합니다.`,
       wealthLuck: `${name}님의 재물운은 매우 우호적입니다.\n투자와 사업에 좋은 운을 타고 있으며,\n올해는 경제적 성장이 예상됩니다.`,
       loveLuck: `${name}님의 연애운은 긍정적입니다.\n새로운 인연을 만날 가능성이 높으며,\n기존 관계는 더욱 돈독해질 것입니다.`,
-      monthlyLuck: `1월: 새로운 시작의 달\n2월: 준비와 계획의 달\n3월: 실행과 실현의 달\n(매월 다양한 변화가 예상됩니다)`,
       yearlyLuck: `올해 운세는 매우 긍정적입니다.\n새로운 기회와 도전이 많을 것이며,\n성공의 가능성이 높습니다.`,
-      couple: `궁합 분석 결과 매우 좋습니다.\n상호 존중과 이해가 바탕이 되어\n행복한 관계를 유지할 수 있습니다.`,
+      monthlyLuck: `1월: 새로운 시작의 달\n2월: 준비와 계획의 달\n3월: 실행과 실현의 달\n(매월 다양한 변화가 예상됩니다)`,
 
-      // 생시 불필요 3개 (아래에 표시)
-      nameAnalysis: `"${name}"은(는) 밝고 긍정적인 에너지를 가진 이름입니다.\n주변 사람들에게 좋은 영향을 미치며,\n친화력이 우수합니다.`,
-      fullAnalysis: `당신의 사주는 매우 특별합니다.\n음양오행의 조화가 잘 이루어져 있으며,\n인생의 모든 분야에서 발전이 예상됩니다.`,
+      // 생시 불필요 3개 (아래에 표시 - 템플릿)
       healthLuck: `${name}님의 건강운은 안정적입니다.\n규칙적인 운동과 식단 관리로\n더욱 건강한 한 해를 보낼 수 있습니다.`,
+      couple: `궁합 분석 결과 매우 좋습니다.\n상호 존중과 이해가 바탕이 되어\n행복한 관계를 유지할 수 있습니다.`,
+      fullAnalysis: `당신의 사주는 매우 특별합니다.\n음양오행의 조화가 잘 이루어져 있으며,\n인생의 모든 분야에서 발전이 예상됩니다.`,
     };
   };
 
@@ -50,34 +50,26 @@ export default function PaidAnalysisResult() {
 
     let items = [];
 
-    // 생시 필요 5개 (항상 맨 앞에)
+    // 생시 필요 5개 (맨 앞에 - API 필요)
     if (hasTime) {
       items.push(
-        { key: "wealthLuck", label: "💰 재물운", value: data.wealthLuck },
+        { key: "nameAnalysis", label: "📝 이름분석", value: data.nameAnalysis },
+        { key: "wealthLuck", label: "💎 재물운", value: data.wealthLuck },
         { key: "loveLuck", label: "💕 연애운", value: data.loveLuck },
-        { key: "monthlyLuck", label: "🌙 월별 운세", value: data.monthlyLuck },
-        { key: "yearlyLuck", label: "⭐ 올해 운세", value: data.yearlyLuck }
+        { key: "yearlyLuck", label: "☀️ 올해 운세", value: data.yearlyLuck },
+        { key: "monthlyLuck", label: "🌙 월별 운세", value: data.monthlyLuck }
       );
-
-      // VIP만 궁합분석
-      if (packageName === "VIP 커플팩") {
-        items.push({
-          key: "couple",
-          label: "👫 궁합분석",
-          value: data.couple,
-        });
-      }
     }
 
-    // 생시 불필요 3개 (항상 포함)
+    // 생시 불필요 3개 (아래에 - 템플릿)
     items.push(
-      { key: "nameAnalysis", label: "🔮 이름분석", value: data.nameAnalysis },
+      { key: "healthLuck", label: "🌿 건강운", value: data.healthLuck },
+      { key: "couple", label: "👫 궁합분석", value: data.couple },
       {
         key: "fullAnalysis",
         label: "💎 전체 사주분석",
         value: data.fullAnalysis,
-      },
-      { key: "healthLuck", label: "🌟 건강운", value: data.healthLuck }
+      }
     );
 
     return items;
