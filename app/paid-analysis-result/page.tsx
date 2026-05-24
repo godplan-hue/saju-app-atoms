@@ -1,5 +1,3 @@
-// app/paid-analysis-result/page.tsx
-
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
@@ -76,21 +74,21 @@ export default function PaidAnalysisResult() {
       // 제목 페이지
       const pdfContent = document.createElement("div");
       pdfContent.style.width = "210mm";
-      pdfContent.style.height = "297mm";
-      pdfContent.style.padding = "0";
+      pdfContent.style.height = "auto";
+      pdfContent.style.padding = "20mm";
       pdfContent.style.margin = "0";
       pdfContent.style.border = "none";
       pdfContent.style.background = "linear-gradient(135deg, #fffacd 0%, #ffffe0 100%)";
       pdfContent.style.fontFamily = "'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif";
       pdfContent.style.display = "flex";
       pdfContent.style.flexDirection = "column";
-      pdfContent.style.justifyContent = "center";
+      pdfContent.style.justifyContent = "flex-start";
       pdfContent.style.alignItems = "center";
       pdfContent.style.position = "absolute";
       pdfContent.style.left = "-9999px";
 
       pdfContent.innerHTML = `
-        <div style="text-align: center;">
+        <div style="text-align: center; width: 100%;">
           <div style="font-size: 48px; margin-bottom: 10px;">🔮</div>
           <h1 style="font-size: 36px; font-weight: 900; margin: 5px 0;">점운</h1>
           <p style="font-size: 16px; font-weight: 700; margin: 10px 0 5px 0;">${paidInfo?.name || "사용자"}님의 사주 분석</p>
