@@ -120,13 +120,16 @@ export default function PaidAnalysisResult() {
         const pageContent = document.createElement("div");
         pageContent.style.width = "210mm";
         pageContent.style.height = "297mm";
-        pageContent.style.padding = "10mm 15mm";
+        pageContent.style.padding = "5mm 10mm";
         pageContent.style.margin = "0";
         pageContent.style.background = "linear-gradient(135deg, #fff8dc 0%, #fffacd 100%)";
         pageContent.style.fontFamily = "'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif";
         pageContent.style.position = "absolute";
         pageContent.style.left = "-9999px";
         pageContent.style.boxSizing = "border-box";
+        pageContent.style.display = "flex";
+        pageContent.style.flexDirection = "column";
+        pageContent.style.justifyContent = "flex-start";
 
         pageContent.innerHTML = `
           <h2 style="font-size: 18px; font-weight: 900; margin: 0 0 10px 0; border-bottom: 2px solid #ffd700; padding-bottom: 6px; color: #1a1a1a;">
