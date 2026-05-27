@@ -9,11 +9,16 @@ export default function Payment() {
   const [selectedFeatures, setSelectedFeatures] = useState(["yearlyLuck", "monthlyLuck"]);
   const [isMobile, setIsMobile] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [analysisName, setAnalysisName] = useState("");
 
   useEffect(() => {
     setIsMobile(window.innerWidth < 768);
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", handleResize);
+    
+    const name = sessionStorage.getItem("analysisName") || "분석 완료";
+    setAnalysisName(name);
+    
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -77,7 +82,7 @@ export default function Payment() {
     
     try {
       const currentPages = packages.find(p => p.name === selectedPackage)?.pages || 30;
-      router.push(`/payment-complete?package=${selectedPackage}&pages=${currentPages}`);
+      router.push(`/paid-analysis-result?package=${encodeURIComponent(selectedPackage)}&pages=${currentPages}`);
     } catch (error) {
       alert("결제 처리 중 오류가 발생했습니다.");
       console.error(error);

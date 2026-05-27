@@ -73,6 +73,25 @@ export default function FreeAnalysis() {
     6: "url('https://images.unsplash.com/photo-1709141426613-27e8b5d55f13?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGNvc21pYyUyMGRlc3Rpbnl8ZW58MHx8MHx8fDA%3D')"
   };
 
+  const analysisTypes = [
+    { category: "💰 돈", title: "돈은 벌지만 자산은 안 늘어남", insight: "당신은 월급도 좋고 사업도 잘하는데\n자산이 자꾸 증발합니다", hidden1: "이것만 알면 월급이 자산으로 변합니다\n당신이 놓치는 한 가지 법칙이 있고\n그것을 알면 부자가 돼요", hidden2: "올해 자산이 2배 되는 시기\n투자해야 할 정확한 달\n재정 자유까지의 구체적 플랜" },
+    { category: "💰 돈", title: "큰돈은 들어오는데 자꾸 사라짐", insight: "한 번에 큰돈이 들어오곤 하는데\n큰 지출이 따라와요", hidden1: "큰돈을 붙잡는 비법이 있습니다\n당신이 모르는 '금전 흐름의 법칙'\n이것만 깨달으면 돈이 축적돼요", hidden2: "당신이 피해야 할 지출의 신호\n큰돈을 보관해야 할 정확한 시점\n누적되는 자산의 구체적 방법" },
+    { category: "💰 돈", title: "일을 많이 해도 가난한 느낌", insight: "일은 엄청 열심히 하는데\n가난한 마음이 안 떠나요", hidden1: "당신의 월급은 뛰어났어요\n다만 당신을 가난하게 만드는 믿음이 있어요\n그것을 깨면 풍요로움이 찾아와요", hidden2: "부자의 마인드 전환점\n무의식적 지출 패턴 찾기\n풍요의식이 생기는 정확한 시점" },
+    { category: "💕 애정", title: "짝을 못 만나고 있음", insight: "다들 연애하는데\n나만 혼자예요", hidden1: "당신은 혼자가 아니었어요\n당신을 기다리는 사람이 있어요\n그 사람을 만나는 시간이 왔어요", hidden2: "만날 사람이 올 정확한 시점\n어떻게 만나게 될지의 신호\n행복한 관계의 시작" },
+    { category: "💕 애정", title: "만나는 사람마다 헤어짐", insight: "시작은 좋은데\n항상 같은 지점에서 끝나요", hidden1: "헤어짐은 당신의 탓이 아니었어요\n다만 만나는 사람이 맞지 않았어요\n이번엔 달라질 거야요", hidden2: "헤어지는 이유의 근본 원인\n잘 맞는 사람의 구체적 특징\n오래 가는 사랑의 비결" },
+    { category: "🎯 성공", title: "열심히 해도 인정받지 못함", insight: "당신의 노력은 충분한데\n세상이 모르는 것처럼 느껴져요", hidden1: "당신의 능력은 분명 뛰어났어요\n다만 그것을 아는 사람들이 아직 적었어요\n이제 세상이 알아볼 시간이 왔어요", hidden2: "당신을 주목할 정확한 시점\n주목받기 위한 구체적 행동\n대성공으로 가는 신호" },
+    { category: "🎯 성공", title: "꿈은 크지만 시작 용기가 없음", insight: "좋은 계획은 많지만\n첫 발을 뗄 용기가 없어요", hidden1: "당신의 계획은 충분히 좋아요\n다만 두려움이 더 크게 들렸어요\n이 두려움은 당신이 이겨낼 수 있어요", hidden2: "시작해야 할 정확한 시점\n성공으로 가는 구체적 첫 단계\n두려움을 극복하는 방법" },
+    { category: "💼 사업", title: "사업 아이디어는 많은데 실행 못함", insight: "좋은 아이디어는 계속 생각나는데\n실행할 용기가 없어요", hidden1: "당신의 아이디어는 충분히 좋았어요\n다만 실행할 조건이 맞지 않았어요\n지금이 실행할 최고의 시점이에요", hidden2: "실행해야 할 정확한 시점\n성공할 아이디어의 구체적 형태\n안정적으로 시작하는 방법" },
+    { category: "💼 사업", title: "사업해봤는데 망함", insight: "사업을 시작했지만\n실패해서 자신감을 잃었어요", hidden1: "그 실패는 당신의 탓이 아니었어요\n시점과 조건이 맞지 않았을 뿐\n이번엔 반드시 성공해요", hidden2: "실패의 근본 원인 파악\n이번에 성공할 구체적 조건\n성공하는 사업의 정확한 형태" },
+    { category: "💍 결혼", title: "결혼하고 싶은데 상대가 없음", insight: "결혼을 꿈꾸지만\n연애 자체가 안 돼요", hidden1: "당신의 결혼 준비는 충분했어요\n이제 만날 사람만 남았어요\n그 만남이 곧 올 거야요", hidden2: "만날 사람의 정확한 시점\n결혼까지의 구체적 과정\n행복한 결혼의 시작" },
+  ];
+
+  const getAnalysisType = () => {
+    const hash = (formData.name + formData.birthYear + formData.birthMonth + formData.birthDay).charCodeAt(0) + 
+                 (formData.name + formData.birthYear + formData.birthMonth + formData.birthDay).length;
+    return analysisTypes[hash % analysisTypes.length];
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     if (name === "phone") {
@@ -192,6 +211,14 @@ export default function FreeAnalysis() {
     alert("📄 PDF 저장은 유료 분석에서 가능합니다.\n\n기본(₩9,900)을 결제하세요.");
   };
 
+  const handleGoToPayment = () => {
+    if (analysisResult) {
+      sessionStorage.setItem("analysisResult", JSON.stringify(analysisResult));
+      sessionStorage.setItem("analysisName", formData.name);
+    }
+    router.push("/payment");
+  };
+
   const handleResetAnalysis = () => {
     setStep(1);
     setFormData({ 
@@ -232,6 +259,7 @@ export default function FreeAnalysis() {
 
   if (step === 7) {
     const result = analysisResult || { name: "분석 완료", wealthLuck: "분석 완료", loveLuck: "분석 완료", healthLuck: "분석 완료", couple: "분석 완료", yearlyLuck: "분석 완료", monthlyLuck: "분석 완료", fullAnalysis: "분석 완료" };
+    const selectedType = getAnalysisType();
 
     return (
       <>
@@ -252,15 +280,34 @@ export default function FreeAnalysis() {
                 </div>
               ) : (
                 <div style={{ background: "rgba(255, 255, 255, 0.95)", padding: isMobile ? 25 : 50, borderRadius: 12 }}>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: isMobile ? 10 : 12, marginBottom: isMobile ? 25 : 35 }}>
+                  <div style={{ background: "linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%)", padding: isMobile ? 20 : 25, borderRadius: 12, marginBottom: isMobile ? 15 : 20, border: "2px solid rgba(255,215,0,0.6)" }}>
+                    <p style={{ fontSize: isMobile ? 11 : 12, fontWeight: 900, color: "#FF6B6B", margin: "0 0 8px 0", textAlign: "center" }}>{selectedType.category}</p>
+                    <h2 style={{ fontSize: isMobile ? 14 : 15, fontWeight: 900, color: "#FF6B6B", margin: "0 0 12px 0", borderBottom: "2px solid #FF6B6B", paddingBottom: 8, marginTop: 0 }}>✨ {selectedType.title}</h2>
+
+                    <p style={{ fontSize: isMobile ? 12 : 13, fontWeight: 700, color: "#333", margin: "0 0 12px 0", lineHeight: 1.6, fontStyle: "italic", whiteSpace: "pre-wrap" }}>"{selectedType.insight}"</p>
+
+                    <p style={{ fontSize: isMobile ? 11 : 12, fontWeight: 900, color: "#FF6B6B", margin: "10px 0 6px 0" }}>🎯 당신의 변화</p>
+                    <p style={{ fontSize: isMobile ? 11 : 12, fontWeight: 600, color: "#333", margin: "0 0 12px 0", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>{selectedType.hidden1}</p>
+
+                    <div style={{ background: "rgba(255,215,0,0.15)", padding: "10px 12px", borderRadius: 8, filter: "blur(1.2px)", opacity: 0.8 }}>
+                      <p style={{ fontSize: isMobile ? 10 : 11, fontWeight: 700, color: "#d4af37", margin: "0 0 6px 0" }}>🔮 유료분석에서 공개</p>
+                      <p style={{ fontSize: isMobile ? 11 : 12, fontWeight: 600, color: "#333", margin: "0", lineHeight: 1.5, whiteSpace: "pre-wrap" }}>{selectedType.hidden2}</p>
+                    </div>
+
+                    <p style={{ fontSize: isMobile ? 10 : 11, fontWeight: 700, color: "#d4af37", margin: "12px 0 0 0", textAlign: "center", fontStyle: "italic" }}>👉 {formData.name}님의 정확한 변화 시점과<br/>구체적 실행법이 모두 공개됩니다</p>
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: isMobile ? 10 : 12, marginBottom: isMobile ? 15 : 20 }}>
                     <button onClick={handleShare} style={{ padding: isMobile ? 13 : 16, background: "linear-gradient(135deg, #00bcd4, #0097a7)", color: "white", border: "none", borderRadius: 8, fontWeight: 900, fontSize: isMobile ? 13 : 15, cursor: "pointer" }}>📱 공유하기</button>
                     <button onClick={handleDownloadPDF} style={{ padding: isMobile ? 13 : 16, background: "linear-gradient(135deg, #ff9800, #f57c00)", color: "white", border: "none", borderRadius: 8, fontWeight: 900, fontSize: isMobile ? 13 : 15, cursor: "pointer" }}>📄 PDF 저장</button>
                   </div>
 
+                  <button onClick={handleGoToPayment} style={{ width: "100%", padding: isMobile ? 15 : 17, background: "linear-gradient(135deg, #ff1493, #ff69b4)", color: "white", border: "none", borderRadius: 8, fontWeight: 900, fontSize: isMobile ? 15 : 17, cursor: "pointer", marginBottom: isMobile ? 20 : 28 }}>💎 {selectedType.category} 완벽 공략법 보기</button>
+
                   <div id="result-content">
                     <div style={{ marginBottom: isMobile ? 25 : 35 }}>
                       <h2 style={{ color: "#d4af37", fontSize: isMobile ? 17 : 21, fontWeight: 900, marginBottom: isMobile ? 10 : 14, borderBottom: "3px solid #d4af37", paddingBottom: isMobile ? 8 : 10, marginTop: 0 }}>📝 이름 분석</h2>
-                      <p style={{ color: "#333", fontSize: isMobile ? 13 : 15, fontWeight: 500, lineHeight: isMobile ? 1.0 : 1.2, marginTop: 0, marginBottom: 0, whiteSpace: "pre-wrap", wordBreak: "break-word", overflowWrap: "break-word", wordWrap: "break-word", maxWidth: "100%" }}>{result.name}</p>
+                      <p style={{ color: "#333", fontSize: isMobile ? 13 : 15, fontWeight: 500, lineHeight: 1.2, marginTop: 0, marginBottom: 0, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{result.name}</p>
                     </div>
 
                     <div style={{ marginBottom: isMobile ? 25 : 35 }}>
@@ -303,7 +350,7 @@ export default function FreeAnalysis() {
                     <p style={{ color: "#333", fontSize: isMobile ? 13 : 15, fontWeight: 700, lineHeight: 1.8, marginTop: 0, marginBottom: 0, textAlign: "center" }}>✨ <strong>더 자세한 분석</strong>은<br/>유료 분석 코스에서!</p>
                   </div>
 
-                  <button onClick={() => router.push("/payment")} style={{ width: "100%", padding: isMobile ? 15 : 17, background: "linear-gradient(135deg, #ff1493, #ff69b4)", color: "white", border: "none", borderRadius: 8, fontWeight: 900, fontSize: isMobile ? 15 : 17, cursor: "pointer", marginBottom: 12 }}>💳 유료 분석 결제하기</button>
+                  <button onClick={handleGoToPayment} style={{ width: "100%", padding: isMobile ? 15 : 17, background: "linear-gradient(135deg, #ff1493, #ff69b4)", color: "white", border: "none", borderRadius: 8, fontWeight: 900, fontSize: isMobile ? 15 : 17, cursor: "pointer", marginBottom: 12 }}>💳 유료 분석 결제하기</button>
                   <p style={{ color: "#666", fontSize: isMobile ? 11 : 13, fontWeight: 700, textAlign: "center", marginTop: 0, marginBottom: 0 }}>📄 30페이지 - 올해 운세 + 월별 운세</p>
                 </div>
               )}

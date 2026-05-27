@@ -11,59 +11,80 @@ function PaidAnalysisResultContent() {
   const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
-    const infoStr = localStorage.getItem("paidAnalysisInfo");
-    const pkg = searchParams.get("package") || "베이직";
+    const infoStr = sessionStorage.getItem("analysisResult");
+    const pkg = searchParams.get("package") || "기본 분석";
 
     if (infoStr) {
-      setPaidInfo(JSON.parse(infoStr));
+      try {
+        setPaidInfo(JSON.parse(infoStr));
+      } catch (e) {
+        console.error("Failed to parse:", e);
+      }
     }
     setPackageName(pkg);
   }, [searchParams]);
 
   const getAnalysisData = () => {
-    const name = paidInfo?.name || "사용자";
+    const name = paidInfo?.name || "분석 완료";
 
     return {
-      nameAnalysis: `"${name}"은(는) 밝고 긍정적인\n에너지를 가진 이름입니다.\n\n각 글자가 지닌 뜻을 통해\n당신의 성격과 운명을 알 수 있습니다.\n\n주변 사람들에게 좋은 영향을 미치며,\n친화력이 우수합니다.`,
-      wealthLuck: `재물운은 매우 우호적입니다.\n\n투자와 사업에 좋은 운을 타고 있으며,\n올해는 경제적 성장이 예상됩니다.`,
-      loveLuck: `연애운은 긍정적입니다.\n\n새로운 인연을 만날 가능성이 높으며,\n기존 관계는 더욱 돈독해질 것입니다.`,
-      yearlyLuck: `올해 운세는 매우 긍정적입니다.\n\n새로운 기회와 도전이 많을 것이며,\n성공의 가능성이 높습니다.`,
-      monthlyLuck: `1월: 새로운 시작의 달\n2월: 준비와 계획의 달\n3월: 실행과 실현의 달\n\n(매월 다양한 변화가 예상됩니다)`,
-      healthLuck: `건강운은 안정적입니다.\n\n규칙적인 운동과 식단 관리로\n더욱 건강한 한 해를 보낼 수 있습니다.`,
-      couple: `궁합 분석 결과 매우 좋습니다.\n\n상호 존중과 이해가 바탕이 되어\n행복한 관계를 유지할 수 있습니다.`,
-      fullAnalysis: `사주는 매우 특별합니다.\n\n음양오행의 조화가 잘 이루어져 있으며,\n인생의 모든 분야에서 발전이 예상됩니다.`,
+      nameAnalysis: paidInfo?.name || "분석 완료",
+      wealthLuck: paidInfo?.wealthLuck || "분석 완료",
+      loveLuck: paidInfo?.loveLuck || "분석 완료",
+      yearlyLuck: paidInfo?.yearlyLuck || "분석 완료",
+      monthlyLuck: paidInfo?.monthlyLuck || "분석 완료",
+      healthLuck: paidInfo?.healthLuck || "분석 완료",
+      couple: paidInfo?.couple || "분석 완료",
+      fullAnalysis: paidInfo?.fullAnalysis || paidInfo?.analysis || "분석 완료",
     };
   };
 
   const getDisplayItems = () => {
     const data = getAnalysisData();
-    const hasTime = paidInfo?.birthTime && paidInfo.birthTime !== "00:00";
-
     let items = [];
 
-    if (hasTime) {
-      items.push(
-        { key: "nameAnalysis", label: "📝 이름분석", value: data.nameAnalysis },
-        { key: "wealthLuck", label: "💎 재물운", value: data.wealthLuck },
-        { key: "loveLuck", label: "💕 연애운", value: data.loveLuck },
-        { key: "yearlyLuck", label: "☀️ 올해 운세", value: data.yearlyLuck },
-        { key: "monthlyLuck", label: "🌙 월별 운세", value: data.monthlyLuck }
-      );
-    } else {
-      items.push(
-        { key: "nameAnalysis", label: "📝 이름분석", value: data.nameAnalysis }
-      );
+    switch(packageName) {
+      case "기본 분석":
+        items.push(
+          { key: "yearlyLuck", label: "☀️ 올해 운세", value: data.yearlyLuck },
+          { key: "monthlyLuck", label: "🌙 월별 운세", value: data.monthlyLuck }
+        );
+        break;
+      case "베이직":
+        items.push(
+          { key: "yearlyLuck", label: "☀️ 올해 운세", value: data.yearlyLuck },
+          { key: "monthlyLuck", label: "🌙 월별 운세", value: data.monthlyLuck },
+          { key: "wealthLuck", label: "💎 재물운", value: data.wealthLuck },
+          { key: "loveLuck", label: "💕 연애운", value: data.loveLuck }
+        );
+        break;
+      case "프리미엄":
+        items.push(
+          { key: "yearlyLuck", label: "☀️ 올해 운세", value: data.yearlyLuck },
+          { key: "monthlyLuck", label: "🌙 월별 운세", value: data.monthlyLuck },
+          { key: "wealthLuck", label: "💎 재물운", value: data.wealthLuck },
+          { key: "loveLuck", label: "💕 연애운", value: data.loveLuck },
+          { key: "healthLuck", label: "🌿 건강운", value: data.healthLuck }
+        );
+        break;
+      case "VIP 커플팩":
+        items.push(
+          { key: "nameAnalysis", label: "📝 이름분석", value: data.nameAnalysis },
+          { key: "wealthLuck", label: "💎 재물운", value: data.wealthLuck },
+          { key: "loveLuck", label: "💕 연애운", value: data.loveLuck },
+          { key: "healthLuck", label: "🌿 건강운", value: data.healthLuck },
+          { key: "couple", label: "👫 궁합분석", value: data.couple },
+          { key: "yearlyLuck", label: "☀️ 올해 운세", value: data.yearlyLuck },
+          { key: "monthlyLuck", label: "🌙 월별 운세", value: data.monthlyLuck },
+          { key: "fullAnalysis", label: "🎋 전체 사주분석", value: data.fullAnalysis }
+        );
+        break;
+      default:
+        items.push(
+          { key: "yearlyLuck", label: "☀️ 올해 운세", value: data.yearlyLuck },
+          { key: "monthlyLuck", label: "🌙 월별 운세", value: data.monthlyLuck }
+        );
     }
-
-    items.push(
-      { key: "healthLuck", label: "🌿 건강운", value: data.healthLuck },
-      { key: "couple", label: "👫 궁합분석", value: data.couple },
-      {
-        key: "fullAnalysis",
-        label: "💎 전체 사주분석",
-        value: data.fullAnalysis,
-      }
-    );
 
     return items;
   };
@@ -83,14 +104,13 @@ function PaidAnalysisResultContent() {
         <div style="margin: 0; padding: 0;">
           <div style="width: 210mm; height: 297mm; background-color: #FFD700; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; box-sizing: border-box; padding: 40px; margin: 0; page-break-after: avoid;">
             <div style="font-size: 80px; margin-bottom: 30px;">🔮</div>
-            <h1 style="font-size: 48px; font-weight: 900; margin: 0 0 30px 0; color: #1a1a1a;">점운</h1>
-            <p style="font-size: 24px; font-weight: 700; margin: 0 0 50px 0; color: #333;">${paidInfo.name}님의 사주 분석</p>
-            <p style="font-size: 16px; font-weight: 700; color: #666;">${packageName} 패키지</p>
+            <h1 style="font-size: 48px; font-weight: 900; margin: 0 0 50px 0; color: #1a1a1a;">점운</h1>
+            <p style="font-size: 20px; font-weight: 700; margin: 0; color: #666;">${packageName} 패키지</p>
           </div>
       `;
 
       const items = getDisplayItems();
-      
+     
       items.forEach((item, index) => {
         htmlContent += `
           <div style="width: 210mm; height: 297mm; background-color: #FFD700; display: flex; flex-direction: column; justify-content: flex-start; padding: 30px; box-sizing: border-box; margin: 0;">
@@ -125,14 +145,14 @@ function PaidAnalysisResultContent() {
         margin: 0,
         filename: `점운_${paidInfo.name}_${packageName}.pdf`,
         image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { 
+        html2canvas: {
           scale: 2,
           useCORS: true,
           logging: false,
           backgroundColor: "#FFD700",
           allowTaint: true
         },
-        jsPDF: { 
+        jsPDF: {
           orientation: "p",
           unit: "mm",
           format: "a4",
@@ -185,11 +205,12 @@ function PaidAnalysisResultContent() {
               style={{
                 fontSize: "clamp(28px, 5vw, 36px)",
                 fontWeight: 900,
-                marginBottom: 12,
+                marginBottom: 30,
                 color: "#1a1a1a",
+                marginTop: 0,
               }}
             >
-              {paidInfo?.name || "사용자"}님의 사주 분석
+              점운
             </h1>
             <p
               style={{
@@ -197,6 +218,7 @@ function PaidAnalysisResultContent() {
                 color: "#555",
                 fontWeight: 700,
                 margin: 0,
+                marginBottom: 30,
               }}
             >
               {packageName} 패키지
@@ -217,23 +239,21 @@ function PaidAnalysisResultContent() {
                 fontSize: 13,
                 color: "#333",
                 fontWeight: 700,
-                margin: "0 0 12px 0",
+                margin: "0 0 8px 0",
               }}
             >
-              📅 생년월일: {paidInfo?.birthDate}
+              📦 패키지: {packageName}
             </p>
-            {paidInfo?.birthTime && paidInfo.birthTime !== "00:00" && (
-              <p
-                style={{
-                  fontSize: 13,
-                  color: "#333",
-                  fontWeight: 700,
-                  margin: 0,
-                }}
-              >
-                🕐 태어난 시간: {paidInfo.birthTime}
-              </p>
-            )}
+            <p
+              style={{
+                fontSize: 13,
+                color: "#333",
+                fontWeight: 700,
+                margin: 0,
+              }}
+            >
+              ✨ {displayItems.length}개 운세 포함
+            </p>
           </div>
 
           {displayItems.map((item) => (
