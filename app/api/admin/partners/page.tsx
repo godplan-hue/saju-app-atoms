@@ -1,18 +1,26 @@
 "use client";
+
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+
 export default function AdminPartners() {
   const router = useRouter();
+
   useEffect(() => {
-    if (!localStorage.getItem("adminId")) router.push("/admin/login");
+    const adminId = localStorage.getItem("adminId");
+    if (!adminId) {
+      router.push("/admin/login");
+    }
   }, [router]);
+
   const handleLogout = () => {
     localStorage.removeItem("adminId");
     localStorage.removeItem("adminName");
     router.push("/admin/login");
   };
+
   return (
-    <main style={{ minHeight: "100vh", background: "#f5f5f5", fontFamily: "'Apple SD Gothic Neo'", display: "flex" }}>
+    <main style={{ minHeight: "100vh", background: "#f5f5f5", fontFamily: "'Apple SD Gothic Neo', sans-serif", display: "flex" }}>
       <div style={{ width: "250px", background: "linear-gradient(135deg, #667eea, #764ba2)", padding: "30px 20px", color: "white", display: "flex", flexDirection: "column" }}>
         <h1 style={{ fontSize: "24px", fontWeight: 900, marginTop: 0, marginBottom: "30px" }}>👑 점운</h1>
         <div style={{ flex: 1 }}>
