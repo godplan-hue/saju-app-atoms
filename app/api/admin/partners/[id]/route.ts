@@ -5,15 +5,6 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const adminId = request.headers.get("x-admin-id");
-
-    if (!adminId) {
-      return NextResponse.json(
-        { error: "인증되지 않았습니다" },
-        { status: 401 }
-      );
-    }
-
     const { id } = params;
 
     return NextResponse.json({
